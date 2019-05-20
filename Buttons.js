@@ -32,8 +32,8 @@ export default class Login extends React.Component {
 					/>
 					
 					<Button
-						onPress={this._onPressButton}			
-						title="Items"
+						onPress={ () => this._onPressButton('UI')}			
+						title="Test UI"
 						color="gray"
 					/>
 					
