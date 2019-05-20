@@ -9,12 +9,25 @@ import ItemContent from './ItemContent';
 import UI from './ui';
 
 const Stack = createStackNavigator({
-  Home: { screen: Buttons },
+  //Home: { screen: Buttons },
+	Home: { screen: UI },
   Users: { screen: UserContent },
 	Lists: { screen: ListContent },
 	Items: { screen: ItemContent },
-	UI: { screen: UI },
-});
+	//UI: { screen: UI },
+	},
+	{
+	defaultNavigationOptions: {
+		headerStyle: {
+			backgroundColor: 'orangered',
+		},
+		headerTintColor: '#fff',
+		headerTitleStyle: {
+			flex: 1,
+		},
+	}
+	}
+);
 
 const App = createAppContainer(Stack);
 export default App;

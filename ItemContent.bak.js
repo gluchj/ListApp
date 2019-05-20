@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
-import { Button, ListItem, Overlay, Input } from 'react-native-elements';
+import { StyleSheet, FlatList, ActivityIndicator, Text, View, Alert, TouchableHighlight } from 'react-native';
+import { Header, ListItem, Overlay, Input } from 'react-native-elements';
 
 export default class ItemContent extends React.Component {
 	constructor(props) {
@@ -11,25 +11,20 @@ export default class ItemContent extends React.Component {
 			isVisible: false,
 			username: params.user,
 			list: params.listID,
-			dataSource: params.data,
-			selectedItem: '',
+			dataSource: params.data
 		}
 	}
 	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
-		this.setState({ selectedItem: item });
-		this.setState({ isVisible: true, });
-	}
-	
-	_onButtonPress = () => {
-		this.setState({ isVisible: false, });
+		Alert.alert("listID: " + item.listID + "\nItem: " + item.item_text + "\nQty: " + item.qty + "\nNote: " + item.note);
 	}
 	
 	/* defines the separator line used by ItemSeparatorComponent */
 	renderSeparator = () => {
 		return (
-			<View style={{height: 1, width: "92%", backgroundColor: "orangered"}}/>
+			<View style={{height: 1, width: "92%", backgroundColor: "orangered"}}
+			/>
 		);
 	};
 	
@@ -47,6 +42,15 @@ export default class ItemContent extends React.Component {
 		
     return (
       <View style={styles.container}>
+				
+				<Header
+					placement="left"
+					leftComponent={{ icon: 'menu', color: '#fff' }}
+					centerComponent={{ text: 'List Application', style: {color: '#fff'} }}
+					rightComponent={{ icon: 'home', color: '#fff' }}
+					containerStyle={{ backgroundColor: 'orangered', }}
+				/>
+				
 				<FlatList
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.item_text }
@@ -62,29 +66,7 @@ export default class ItemContent extends React.Component {
 				/>
 				
 				<Overlay isVisible={this.state.isVisible} style={styles.overlay}>
-					<View style={styles.container}>
-						<Input
-							label='Item'
-							value={this.state.selectedItem.item_text}
-							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
-						/>
-						<Input
-							label='Qty'
-							value={this.state.selectedItem.qty}
-							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
-						/>
-						<Input
-							label='Note'
-							value={this.state.selectedItem.note}
-							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
-						/>
-						<Button
-							title='Submit'
-							buttonStyle={styles.button}
-							titleStyle={{width: '100%'}}
-							onPress={this._onButtonPress}
-						/>
-					</View>
+					<Text>This is the item</Text>
 				</Overlay>
 
       </View>

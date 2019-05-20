@@ -1,34 +1,42 @@
 import React from 'react';
-import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
-import { Header, ListItem } from 'react-native-elements';
+import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
+import { Header, ListItem, Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ListContent extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {isLoading: true}
-	}
-	
-	/* executes fetch to API endpoint on load */
-	componentDidMount() {
 		const { params } = this.props.navigation.state;
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + params.user + '/lists')
-			.then((response) => response.json())
-			.then((responseJson) => {
-				console.log(responseJson.data);
-				this.setState({
-					isLoading: false,
-					dataSource: responseJson.data,
-				})
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+		this.state = { 
+			isLoading: false,
+			username: params.user,
+			dataSource: params.data
+		}
 	}
 	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
-		const { params } = this.props.navigation.state;
-		this.props.navigation.navigate('Items', {list: item.listID, user: params.user});
+		this.setState({ isLoading: true });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + item.listID)
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.data === undefined || responseJson.data.length == 0) {
+					this.setState({ isLoading: false });
+				}
+				else {
+					this.setState({ isLoading: false });
+					this.props.navigation.navigate('Items', 
+						{
+							data: responseJson.data, 
+							user: this.state.username,
+							list: item.listID
+						});
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				this.setState({ isLoading: false });
+			});
 	}
 	
 	/* defines the separator line used by ItemSeparatorComponent */
@@ -39,29 +47,50 @@ export default class ListContent extends React.Component {
 		);
 	};
 	
-	static navigationOptions = { title: 'Lists', };
+	static navigationOptions = {
+		header: null
+	
+
+//		headerTitle: 'Lists',
+//		headerLeft: (<Button
+//								title="Home"
+//									color="orangered"
+//									icon={
+//										<Icon
+//											name="list"
+//											size={18}
+//											color="white"
+//										/>
+//									}
+//								/>
+//			<Button	
+//				onPress={ () => Alert.alert('This is a button!')}
+//				title="Info"
+//			/>
+//		),
+	};
 	
 	/* renders API fetch data once retrieved */
   render() {
 		if(this.state.isLoading) {
 			return(
 				<View style={styles.container}>
-					<ActivityIndicator/>
+					<ActivityIndicator size="large"/>
 				</View>
 			)
 		}
 		
     return (
       <View style={styles.container}>
-				
+			
 				<Header
 					placement="left"
-					leftComponent={{ icon: 'home', color: '#fff' }}
-					centerComponent={{ text: 'List Application', style: {color: '#fff'} }}
-					rightComponent={{ icon: 'menu', color: '#fff' }}
+					leftComponent={{ icon: 'menu', color: '#fff' }}
+					centerComponent={{ text: 'List Application', style: {color: '#fff', fontSize: 20} }}
+					rightComponent={{ icon: 'home', color: '#fff' }}
 					containerStyle={{ backgroundColor: 'orangered', }}
 				/>
-				
+			
 				<FlatList
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.listID }
@@ -74,7 +103,6 @@ export default class ListContent extends React.Component {
 					)}
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
-
       </View>
     );
   }
