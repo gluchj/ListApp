@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
-import { Header, ListItem, Button } from 'react-native-elements';
+import { Header, ListItem, Button, Input } from 'react-native-elements';
+import Dialog from 'react-native-dialog';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ListContent extends React.Component {
@@ -10,7 +11,10 @@ export default class ListContent extends React.Component {
 		this.state = { 
 			isLoading: false,
 			username: params.user,
-			dataSource: params.data
+			dataSource: params.data,
+			deleteDialogVisible: false,
+			addListDialogVisible: false,
+			listname: '',
 		}
 	}
 	
@@ -37,6 +41,45 @@ export default class ListContent extends React.Component {
 				console.error(error);
 				this.setState({ isLoading: false });
 			});
+	}
+	
+	_longPressItem(item) {
+		this.setState({ deleteDialogVisible: true });
+	}
+	
+	_addButtonPress() {
+		this.setState({ addListDialogVisible: true });
+	}
+	
+	handleCancel = () => {
+		this.setState({ addListDialogVisible: false, deleteDialogVisible: false, });
+	}
+	
+	handleCreate = () => {
+		//alert(this.state.listname);
+		this.setState({ isLoading: true });
+		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', },
+			body: JSON.stringify ({ "listName": this.state.listname })
+		})
+		.then((responseJson) => {
+			this.setState({ isLoading: false });
+			this.setState({ addListDialogVisible: false });
+		})
+		.catch((error) => {
+			console.error(error);
+			this.setState({ isLoading: false });
+			this.setState({ addListDialogVisible: false });
+		});
+	}
+	
+	handleDelete = () => {
+		
+	}
+	
+	changeText = (listname) => {
+		this.setState({ listname: listname });
 	}
 	
 	/* defines the separator line used by ItemSeparatorComponent */
@@ -82,20 +125,22 @@ export default class ListContent extends React.Component {
 		
     return (
       <View style={styles.container}>
-			
 				<Header
 					placement="left"
-					leftComponent={{ icon: 'menu', color: '#fff' }}
+					leftComponent={{ icon: 'menu', color: '#fff', size: 30, onPress: () => alert('hi'), }}
 					centerComponent={{ text: 'List Application', style: {color: '#fff', fontSize: 20} }}
-					rightComponent={{ icon: 'home', color: '#fff' }}
+					rightComponent={{ icon: 'add', color: '#fff', size: 30, onPress: () => this._addButtonPress(), }}
 					containerStyle={{ backgroundColor: 'orangered', }}
 				/>
-			
 				<FlatList
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.listID }
 					renderItem={({item}) => (
-						<TouchableHighlight underlayColor='#dddddd' onPress={ () => this._selectItem(item)}>
+						<TouchableHighlight 
+							underlayColor='#dddddd'
+							onPress={ () => this._selectItem(item)}
+							onLongPress={ () => this._longPressItem(item)}
+						>
 							<ListItem
 								title={ `${item.listID}: ${item.list_name}` }
 							/>
@@ -103,7 +148,38 @@ export default class ListContent extends React.Component {
 					)}
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
-      </View>
+      
+				 {/* add new list input dialog box */}
+				 <View>
+					<Dialog.Container visible={this.state.addListDialogVisible}>
+						<Dialog.Title>Create List</Dialog.Title>
+						<Dialog.Input
+							onChangeText={this.changeText}
+							placeholder='Enter new list name'
+							style={{ 
+								borderColor: 'black',
+								borderBottomWidth: 1, 
+								fontSize: 16,
+							}}
+						/>
+						<Dialog.Button label="Cancel" onPress={this.handleCancel} />
+						<Dialog.Button label="Create" onPress={this.handleCreate} />
+					</Dialog.Container>
+				</View>
+				
+				{/* confirm list delete dialog box */}
+				 <View>
+					<Dialog.Container visible={this.state.deleteDialogVisible}>
+						<Dialog.Title>List delete</Dialog.Title>
+						<Dialog.Description>
+							Are you sure you want to delete this list and all items in it?
+						</Dialog.Description>
+						<Dialog.Button label="Cancel" onPress={this.handleCancel} />
+						<Dialog.Button label="Delete" onPress={this.handleDelete} />
+					</Dialog.Container>
+				</View>
+			
+			</View>
     );
   }
 }
