@@ -1,6 +1,11 @@
 import React from 'react';
-import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
+import { ScrollView, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { Button, ListItem, Overlay, Input } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ActionButton from 'react-native-action-button';
+import Dialog from 'react-native-dialog';
+import Modal from 'react-native-modal';
+
 
 export default class ItemContent extends React.Component {
 	constructor(props) {
@@ -9,11 +14,38 @@ export default class ItemContent extends React.Component {
 		this.state = {
 			isLoading: false,
 			isVisible: false,
+			deleteDialogVisible: false,
 			username: params.user,
-			list: params.listID,
-			dataSource: params.data,
+			list: params.list,
+			dataSource: '',
 			selectedItem: '',
 		}
+	}
+	
+	/* Load Flatlist with user 'List' data */	
+	componentDidMount() {
+		this.fetchItems();
+	}
+	
+	/* fetchItems() retrieves all items for the selected list */
+	fetchItems() {
+		this.setState({ isLoading: true });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list)
+			.then((response) => response.json())
+			.then((responseJson) => {
+				//if (responseJson.data === undefined || responseJson.data.length == 0) {
+				if (responseJson.data === undefined) {
+					this.setState({ isLoading: false });
+				}
+				else {
+					this.setState({ dataSource: responseJson.data });
+					this.setState({ isLoading: false });
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				this.setState({ isLoading: false });
+			});
 	}
 	
 	/* load next screen passing user touch selection */
@@ -22,8 +54,44 @@ export default class ItemContent extends React.Component {
 		this.setState({ isVisible: true, });
 	}
 	
+	_addItem() {
+		this.setState({ isVisible: true, });
+	}
+	
+	handleCancel = () => {
+		this.setState({ isVisible: false, });
+		this.setState({ deleteDialogVisible: false, });
+	}
+	
+	handleDelete = () => {
+		/*TODO add item to list, close dialog box */
+	}
+	
+	handleCreate = () => {
+/*		this.setState({ isLoading: true });
+		this.setState({ isVisible: false });
+		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', },
+			body: JSON.stringify ({ "listName": this.state.listname })
+		})
+		.then((responseJson) => {
+			this.fetchData();
+			this.setState({ isLoading: false });
+		})
+		.catch((error) => {
+			console.error(error);
+			this.setState({ isLoading: false });
+		});   */
+	}
+	
 	_onButtonPress = () => {
 		this.setState({ isVisible: false, });
+	}
+	
+	_longPressItem(item) {
+		this.setState({ deleteDialogVisible: true });
+		this.setState({ selectedItem: item });
 	}
 	
 	/* defines the separator line used by ItemSeparatorComponent */
@@ -51,7 +119,11 @@ export default class ItemContent extends React.Component {
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.item_text }
 					renderItem={({item}) => (
-						<TouchableHighlight underlayColor='#dddddd' onPress={ () => this._selectItem(item)}>
+						<TouchableHighlight 
+							underlayColor='#dddddd' 
+							onPress={ () => this._selectItem(item)}
+							onLongPress={ () => this._longPressItem(item)}
+						>
 							<ListItem
 								title={ ` ${item.item_text} (qty: ${item.qty})` }
 								subtitle={ item.note }
@@ -61,8 +133,14 @@ export default class ItemContent extends React.Component {
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
 				
-				<Overlay isVisible={this.state.isVisible} style={styles.overlay}>
-					<View style={styles.container}>
+				<Modal 
+					isVisible={this.state.isVisible}
+					avoidKeyboard={true}
+					backdropColor={'white'}
+					backdropOpacity={1.0}
+					coverScreen={false}
+				>	
+					<View style={{ flex: 1}}>
 						<Input
 							label='Item'
 							value={this.state.selectedItem.item_text}
@@ -78,15 +156,36 @@ export default class ItemContent extends React.Component {
 							value={this.state.selectedItem.note}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
-						<Button
-							title='Submit'
-							buttonStyle={styles.button}
-							titleStyle={{width: '100%'}}
-							onPress={this._onButtonPress}
-						/>
+						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+							<Button
+								title='Cancel'
+								buttonStyle={{ backgroundColor: 'red', }}
+								titleStyle={{width: '45%'}}
+								onPress={this.handleCancel}
+							/>
+							<Button
+								title='Submit'
+								buttonStyle={{ backgroundColor: 'blue', }}
+								titleStyle={{width: '45%'}}
+								onPress={this.handleCreate}
+							/>
+						</View>
 					</View>
-				</Overlay>
+				</Modal>
 
+				{/* confirm list delete dialog box */}
+				<View>
+					<Dialog.Container visible={this.state.deleteDialogVisible}>
+						<Dialog.Title>List delete</Dialog.Title>
+						<Dialog.Description>
+							Are you sure you want to delete this list and all items in it?
+						</Dialog.Description>
+						<Dialog.Button label="Cancel" onPress={this.handleCancel} />
+						<Dialog.Button label="Delete" onPress={this.handleDelete} />
+					</Dialog.Container>
+				</View>
+
+				<ActionButton buttonColor='orangered' onPress={ () => this._addItem()} />
       </View>
     );
   }
@@ -97,7 +196,4 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-	overlay: {
-		flex: 1,
-	},
 });

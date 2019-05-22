@@ -10,8 +10,7 @@ export default class ListContent extends React.Component {
 		const { params } = this.props.navigation.state;
 		this.state = { 
 			isLoading: false,
-			username: params.user,
-			//dataSource: params.data,
+			username: params.user.username,
 			dataSource: '',
 			deleteDialogVisible: false,
 			addListDialogVisible: false,
@@ -20,7 +19,7 @@ export default class ListContent extends React.Component {
 		}
 	}
 	
-		
+	/* Load Flatlist with user 'List' data */	
 	componentDidMount() {
 		this.fetchData();
 	}
@@ -30,7 +29,8 @@ export default class ListContent extends React.Component {
 		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/')
 			.then((response) => response.json())
 			.then((responseJson) => {
-				if (responseJson.data === undefined || responseJson.data.length == 0) {
+				//if (responseJson.data === undefined || responseJson.data.length == 0) {
+				if (responseJson.data === undefined) {
 					this.setState({ isLoading: false });
 				}
 				else {
@@ -45,32 +45,14 @@ export default class ListContent extends React.Component {
 			});
 	}
 
-	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
-		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + item.listID)
-			.then((response) => response.json())
-			.then((responseJson) => {
-				if (responseJson.data === undefined || responseJson.data.length == 0) {
-					this.setState({ isLoading: false });
-				}
-				else {
-					this.setState({ isLoading: false });
-					this.props.navigation.navigate('Items', 
-						{
-							data: responseJson.data, 
-							user: this.state.username,
-							list: item.listID
-						});
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-				this.setState({ isLoading: false });
-			});
+		this.props.navigation.navigate('Items', {
+			user: this.state.username,
+			list: item.listID
+		});
 	}
-	
+
 	_longPressItem(item) {
 		this.setState({ deleteDialogVisible: true });
 		this.setState({ selectedItem: item });
@@ -182,7 +164,7 @@ export default class ListContent extends React.Component {
 							onLongPress={ () => this._longPressItem(item)}
 						>
 							<ListItem
-								title={ `${item.listID}: ${item.list_name}` }
+								title={ `${item.list_name}` }
 							/>
 						</TouchableHighlight>
 					)}

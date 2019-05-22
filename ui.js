@@ -1,5 +1,5 @@
 import React, { Component, Linking }from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { Alert, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
 export default class ui extends React.Component {
@@ -17,7 +17,7 @@ export default class ui extends React.Component {
 	
 	_onButtonPress = () => {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/')
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username)
 			.then((response) => response.json())
 			.then((responseJson) => {
 				if (responseJson.data === undefined || responseJson.data.length == 0) {
@@ -25,7 +25,7 @@ export default class ui extends React.Component {
 				}
 				else {
 					this.setState({ isLoading: false });
-					this.props.navigation.navigate('Lists', {data: responseJson.data, user: this.state.username});
+					this.props.navigation.navigate('Lists', { user: responseJson.data[0] });
 				}
 			})
 			.catch((error) => {
