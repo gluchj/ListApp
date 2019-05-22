@@ -11,12 +11,40 @@ export default class ListContent extends React.Component {
 		this.state = { 
 			isLoading: false,
 			username: params.user,
-			dataSource: params.data,
+			//dataSource: params.data,
+			dataSource: '',
 			deleteDialogVisible: false,
 			addListDialogVisible: false,
 			listname: '',
+			selectedItem: '',
 		}
 	}
+	
+		
+	componentDidMount() {
+		this.fetchData();
+	}
+	
+	fetchData() {
+		this.setState({ isLoading: true });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/')
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.data === undefined || responseJson.data.length == 0) {
+					this.setState({ isLoading: false });
+				}
+				else {
+					this.setState({ dataSource: responseJson.data });
+					this.setState({ isLoading: false });
+					//this.props.navigation.navigate('Lists', {data: responseJson.data, user: this.state.username});
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				this.setState({ isLoading: false });
+			});
+	}
+
 	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
@@ -45,6 +73,7 @@ export default class ListContent extends React.Component {
 	
 	_longPressItem(item) {
 		this.setState({ deleteDialogVisible: true });
+		this.setState({ selectedItem: item });
 	}
 	
 	_addButtonPress() {
@@ -56,26 +85,37 @@ export default class ListContent extends React.Component {
 	}
 	
 	handleCreate = () => {
-		//alert(this.state.listname);
 		this.setState({ isLoading: true });
+		this.setState({ addListDialogVisible: false });
 		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', },
 			body: JSON.stringify ({ "listName": this.state.listname })
 		})
 		.then((responseJson) => {
+			this.fetchData();
 			this.setState({ isLoading: false });
-			this.setState({ addListDialogVisible: false });
 		})
 		.catch((error) => {
 			console.error(error);
 			this.setState({ isLoading: false });
-			this.setState({ addListDialogVisible: false });
 		});
 	}
 	
 	handleDelete = () => {
-		
+		this.setState({ isLoading: true });
+		this.setState({ deleteDialogVisible: false });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.selectedItem.listID, {
+			method: 'DELETE',
+		})
+		.then((responseJson) => {
+			this.fetchData();
+			this.setState({ isLoading: false });
+		})
+		.catch((error) => {
+			console.error(error);
+			this.setState({ isLoading: false });
+		});
 	}
 	
 	changeText = (listname) => {
