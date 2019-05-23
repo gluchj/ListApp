@@ -24,6 +24,7 @@ export default class ListContent extends React.Component {
 		this.fetchData();
 	}
 	
+	/* fetch Lists for the selected user */
 	fetchData() {
 		this.setState({ isLoading: true });
 		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/')
@@ -114,25 +115,6 @@ export default class ListContent extends React.Component {
 	
 	static navigationOptions = {
 		header: null
-	
-
-//		headerTitle: 'Lists',
-//		headerLeft: (<Button
-//								title="Home"
-//									color="orangered"
-//									icon={
-//										<Icon
-//											name="list"
-//											size={18}
-//											color="white"
-//										/>
-//									}
-//								/>
-//			<Button	
-//				onPress={ () => Alert.alert('This is a button!')}
-//				title="Info"
-//			/>
-//		),
 	};
 	
 	/* renders API fetch data once retrieved */

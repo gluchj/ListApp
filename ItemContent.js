@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { Button, ListItem, Overlay, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
@@ -19,6 +19,9 @@ export default class ItemContent extends React.Component {
 			list: params.list,
 			dataSource: '',
 			selectedItem: '',
+			item_text: '',
+			qty: '',
+			note: '',
 		}
 	}
 	
@@ -48,6 +51,18 @@ export default class ItemContent extends React.Component {
 			});
 	}
 	
+	changeItemName = (name) => {
+		this.setState({ item_text: name });
+	}
+	
+	changeItemQty = (qty) => {
+		this.setState({ qty: qty});
+	}
+	
+	changeItemNote = (note) => {
+		this.setState({ note: note });
+	}
+	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
 		this.setState({ selectedItem: item });
@@ -61,6 +76,7 @@ export default class ItemContent extends React.Component {
 	handleCancel = () => {
 		this.setState({ isVisible: false, });
 		this.setState({ deleteDialogVisible: false, });
+		this.setState({ selectedItem: '' });
 	}
 	
 	handleDelete = () => {
@@ -68,21 +84,24 @@ export default class ItemContent extends React.Component {
 	}
 	
 	handleCreate = () => {
-/*		this.setState({ isLoading: true });
+  	this.setState({ isLoading: true });
 		this.setState({ isVisible: false });
 		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', },
-			body: JSON.stringify ({ "listName": this.state.listname })
+			body: JSON.stringify ({ "listID": this.state.list,
+															"itemText": this.state.item_text,
+															"qty": this.state.qty,
+															"note": this.state.note })								
 		})
 		.then((responseJson) => {
-			this.fetchData();
+			this.fetchItems();
 			this.setState({ isLoading: false });
 		})
 		.catch((error) => {
 			console.error(error);
 			this.setState({ isLoading: false });
-		});   */
+		});
 	}
 	
 	_onButtonPress = () => {
@@ -143,16 +162,19 @@ export default class ItemContent extends React.Component {
 					<View style={{ flex: 1}}>
 						<Input
 							label='Item'
+							onChangeText={this.changeItemName}
 							value={this.state.selectedItem.item_text}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<Input
 							label='Qty'
+							onChangeText={this.changeItemQty}
 							value={this.state.selectedItem.qty}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<Input
 							label='Note'
+							onChangeText={this.changeItemNote}
 							value={this.state.selectedItem.note}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
