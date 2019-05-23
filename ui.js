@@ -20,7 +20,7 @@ export default class ui extends React.Component {
 		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username)
 			.then((response) => response.json())
 			.then((responseJson) => {
-				if (responseJson.data === undefined || responseJson.data.length == 0) {
+				if (responseJson.data === undefined || responseJson.data.length == 0 || responseJson.data.length > 1) {
 					this.setState({ isLoading: false });
 				}
 				else {

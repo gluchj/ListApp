@@ -18,7 +18,7 @@ export default class ItemContent extends React.Component {
 			username: params.user,
 			list: params.list,
 			dataSource: '',
-			selectedItem: '',
+			//selectedItem: '',
 			item_text: '',
 			qty: '',
 			note: '',
@@ -65,7 +65,8 @@ export default class ItemContent extends React.Component {
 	
 	/* load next screen passing user touch selection */
 	_selectItem(item) {
-		this.setState({ selectedItem: item });
+		//this.setState({ selectedItem: item });
+		this.setState({ item_text: item.item_text, qty: item.qty, note: item.note });
 		this.setState({ isVisible: true, });
 	}
 	
@@ -76,11 +77,28 @@ export default class ItemContent extends React.Component {
 	handleCancel = () => {
 		this.setState({ isVisible: false, });
 		this.setState({ deleteDialogVisible: false, });
-		this.setState({ selectedItem: '' });
+		//this.setState({ selectedItem: '' });
+		this.setState({ item_text: '', qty: '', note: '' });
 	}
 	
 	handleDelete = () => {
-		/*TODO add item to list, close dialog box */
+		/*TODO delete item from list, set state vars to '', close dialog box */
+		this.setState({ isLoading: true });
+		this.setState({ deleteDialogVisible: false });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username
+										+ '/lists/' + this.state.list + '/' + this.state.item_text, {
+			method: 'DELETE',
+		})
+		.then((responseJson) => {
+			this.setState({ item_text: '', qty: '', note: '' });
+			this.fetchItems();
+			this.setState({ isLoading: false });
+		})
+		.catch((error) => {
+			this.setState({ item_text: '', qty: '', note: '' });
+			console.error(error);
+			this.setState({ isLoading: false });
+		});
 	}
 	
 	handleCreate = () => {
@@ -95,10 +113,12 @@ export default class ItemContent extends React.Component {
 															"note": this.state.note })								
 		})
 		.then((responseJson) => {
+			this.setState({ item_text: '', qty: '', note: '' });
 			this.fetchItems();
 			this.setState({ isLoading: false });
 		})
 		.catch((error) => {
+			this.setState({ item_text: '', qty: '', note: '' });
 			console.error(error);
 			this.setState({ isLoading: false });
 		});
@@ -110,7 +130,8 @@ export default class ItemContent extends React.Component {
 	
 	_longPressItem(item) {
 		this.setState({ deleteDialogVisible: true });
-		this.setState({ selectedItem: item });
+		//this.setState({ selectedItem: item });
+		this.setState({ item_text: item.item_text, qty: item.qty, note: item.note });
 	}
 	
 	/* defines the separator line used by ItemSeparatorComponent */
@@ -163,19 +184,19 @@ export default class ItemContent extends React.Component {
 						<Input
 							label='Item'
 							onChangeText={this.changeItemName}
-							value={this.state.selectedItem.item_text}
+							value={this.state.item_text}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<Input
 							label='Qty'
 							onChangeText={this.changeItemQty}
-							value={this.state.selectedItem.qty}
+							value={this.state.qty}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<Input
 							label='Note'
 							onChangeText={this.changeItemNote}
-							value={this.state.selectedItem.note}
+							value={this.state.note}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -198,10 +219,18 @@ export default class ItemContent extends React.Component {
 				{/* confirm list delete dialog box */}
 				<View>
 					<Dialog.Container visible={this.state.deleteDialogVisible}>
-						<Dialog.Title>List delete</Dialog.Title>
+						<Dialog.Title>Item delete</Dialog.Title>
 						<Dialog.Description>
-							Are you sure you want to delete this list and all items in it?
+							Are you sure you want to delete the below item?
 						</Dialog.Description>
+						<Text 
+							style={{ 
+								fontSize: 16,
+								color: 'red',
+								marginLeft: 13 
+							}}>
+							{this.state.item_text}
+						</Text>
 						<Dialog.Button label="Cancel" onPress={this.handleCancel} />
 						<Dialog.Button label="Delete" onPress={this.handleDelete} />
 					</Dialog.Container>
