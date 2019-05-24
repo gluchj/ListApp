@@ -113,6 +113,7 @@ export default class ListContent extends React.Component {
 		);
 	};
 	
+	/* remove default navigation header */
 	static navigationOptions = {
 		header: null
 	};

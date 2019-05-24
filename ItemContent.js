@@ -15,6 +15,7 @@ export default class ItemContent extends React.Component {
 			isLoading: false,
 			isVisible: false,
 			deleteDialogVisible: false,
+			isUpdate: false,
 			username: params.user,
 			list: params.list,
 			dataSource: '',
@@ -68,6 +69,7 @@ export default class ItemContent extends React.Component {
 		//this.setState({ selectedItem: item });
 		this.setState({ item_text: item.item_text, qty: item.qty, note: item.note });
 		this.setState({ isVisible: true, });
+		this.setState({ isUpdate: true, });
 	}
 	
 	_addItem() {
@@ -77,6 +79,7 @@ export default class ItemContent extends React.Component {
 	handleCancel = () => {
 		this.setState({ isVisible: false, });
 		this.setState({ deleteDialogVisible: false, });
+		this.setState({ isUpdate: false, });
 		//this.setState({ selectedItem: '' });
 		this.setState({ item_text: '', qty: '', note: '' });
 	}
@@ -102,10 +105,14 @@ export default class ItemContent extends React.Component {
 	}
 	
 	handleCreate = () => {
-  	this.setState({ isLoading: true });
+  	let Method = 'POST';
+		this.setState({ isLoading: true });
 		this.setState({ isVisible: false });
+		if(this.state.isUpdate) {
+			Method = 'PUT';
+		}
 		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list, {
-			method: 'POST',
+			method: Method,
 			headers: { 'Content-Type': 'application/json', },
 			body: JSON.stringify ({ "listID": this.state.list,
 															"itemText": this.state.item_text,
@@ -116,11 +123,13 @@ export default class ItemContent extends React.Component {
 			this.setState({ item_text: '', qty: '', note: '' });
 			this.fetchItems();
 			this.setState({ isLoading: false });
+			this.setState({ isUpdate: false });
 		})
 		.catch((error) => {
 			this.setState({ item_text: '', qty: '', note: '' });
 			console.error(error);
 			this.setState({ isLoading: false });
+			this.setState({ isUpdate: false });
 		});
 	}
 	
@@ -165,7 +174,7 @@ export default class ItemContent extends React.Component {
 							onLongPress={ () => this._longPressItem(item)}
 						>
 							<ListItem
-								title={ ` ${item.item_text} (qty: ${item.qty})` }
+								title={ `${item.item_text} (qty: ${item.qty})` }
 								subtitle={ item.note }
 							/>
 						</TouchableHighlight>
@@ -185,6 +194,7 @@ export default class ItemContent extends React.Component {
 							label='Item'
 							onChangeText={this.changeItemName}
 							value={this.state.item_text}
+							editable={!this.state.isUpdate}
 							containerStyle={{ marginBottom: 25, borderColor: 'black', }}
 						/>
 						<Input
