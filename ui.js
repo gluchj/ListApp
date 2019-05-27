@@ -1,6 +1,6 @@
 import React, { Component, Linking }from 'react';
 import { Alert, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, } from 'react-native-elements';
 
 export default class ui extends React.Component {
 	constructor(props) {
@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-		marginTop: 50,
-		padding: 12,
+		marginTop: 35,
+		padding: 15,
   },
 	title: {
 		color: 'orangered',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
-import { Button, ListItem, Overlay, Input } from 'react-native-elements';
+import { Button, ListItem, Overlay, Input, } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
 import Dialog from 'react-native-dialog';

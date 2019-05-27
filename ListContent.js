@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
-import { Header, ListItem, Button, Input } from 'react-native-elements';
+import { ListItem, Button, Input } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -22,6 +22,7 @@ export default class ListContent extends React.Component {
 	/* Load Flatlist with user 'List' data */	
 	componentDidMount() {
 		this.fetchData();
+		this.props.navigation.setParams({ addList: this._addButtonPress });
 	}
 	
 	/* fetch Lists for the selected user */
@@ -59,7 +60,7 @@ export default class ListContent extends React.Component {
 		this.setState({ selectedItem: item });
 	}
 	
-	_addButtonPress() {
+	_addButtonPress = () => {
 		this.setState({ addListDialogVisible: true });
 	}
 	
@@ -112,12 +113,31 @@ export default class ListContent extends React.Component {
 			/>
 		);
 	};
-	
-	/* remove default navigation header */
-	static navigationOptions = {
-		header: null
-	};
-	
+
+
+	static navigationOptions = ({navigation, navigationOptions}) => {
+    return {
+      title: 'Lists',
+      headerLeft: 
+				<Icon 
+					name="list"
+					size={25}
+					color="#FFF"
+					style= {{ marginLeft: 18 }}
+					onPress = {navigation.toggleDrawer} 
+				/>,
+      headerRight: (
+        <Icon
+					name="plus"
+					size={25}
+					color="#FFF"
+					style= {{ marginRight: 18 }}
+					onPress={navigation.getParam('addList')}
+				/>
+      ),
+    }
+	}
+
 	/* renders API fetch data once retrieved */
   render() {
 		if(this.state.isLoading) {
@@ -130,13 +150,6 @@ export default class ListContent extends React.Component {
 		
     return (
       <View style={styles.container}>
-				<Header
-					placement="left"
-					leftComponent={{ icon: 'menu', color: '#fff', size: 30, onPress: () => alert('hi'), }}
-					centerComponent={{ text: 'List Application', style: {color: '#fff', fontSize: 20} }}
-					rightComponent={{ icon: 'add', color: '#fff', size: 30, onPress: () => this._addButtonPress(), }}
-					containerStyle={{ backgroundColor: 'orangered', }}
-				/>
 				<FlatList
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.listID }

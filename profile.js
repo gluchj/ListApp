@@ -13,7 +13,11 @@ export default class drawer extends React.Component {
 	}
 	
 	handleUpdate = () => {
-		this.props.navigation.navigate('Profile');
+		//this.props.navigation.openDrawer();
+	}
+	
+		handleCancel = () => {
+		this.props.navigation.navigate('Lists');
 	}
 	
 /*	_handleNameChange = (username) => {
@@ -114,7 +118,7 @@ export default class drawer extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-		width: Dimensions.get("window").width * 0.8,
+		//width: Dimensions.get("window").width * 0.8,
     flex: 1,
     backgroundColor: '#fff',
     //alignItems: 'center',
