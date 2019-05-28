@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default class drawer extends React.Component {
 	constructor(props) {
 		super(props);
+		const {params} = this.props.navigation.state;
+		console.log(params);
 		this.state = {
 			username: '',
 			isLoading: false,

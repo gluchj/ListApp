@@ -2,7 +2,7 @@ import React, {Component }from 'react';
 import { StyleSheet, Text, TextInput, Button } from 'react-native';
 import { Alert, View, Image, Keyboard } from 'react-native';
 
-export default class Login extends React.Component {
+export default class Buttons extends React.Component {
 	constructor(props) {
 		super(props);
 		this._onPressButton = this._onPressButton.bind(this);
@@ -20,8 +20,8 @@ export default class Login extends React.Component {
 				<View style={{width: "80%", height: "100%", justifyContent: 'space-evenly'}}>
 					
 					<Button
-						onPress={ () => this._onPressButton('Users')}			
-						title="Users"
+						onPress={ () => this._onPressButton('Profile')}			
+						title="Profile"
 						color="orangered"
 					/>
 					

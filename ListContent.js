@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { ListItem, Button, Input } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
+import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ListContent extends React.Component {
@@ -10,6 +11,7 @@ export default class ListContent extends React.Component {
 		const { params } = this.props.navigation.state;
 		this.state = { 
 			isLoading: false,
+			isVisible: false,
 			username: params.user.username,
 			dataSource: '',
 			deleteDialogVisible: false,
@@ -56,7 +58,8 @@ export default class ListContent extends React.Component {
 	}
 
 	_longPressItem(item) {
-		this.setState({ deleteDialogVisible: true });
+		//this.setState({ deleteDialogVisible: true });
+		this.setState({ isVisible: true });
 		this.setState({ selectedItem: item });
 	}
 	
@@ -65,7 +68,7 @@ export default class ListContent extends React.Component {
 	}
 	
 	handleCancel = () => {
-		this.setState({ addListDialogVisible: false, deleteDialogVisible: false, });
+		this.setState({ addListDialogVisible: false, deleteDialogVisible: false, isVisible: false, });
 	}
 	
 	handleCreate = () => {
@@ -166,7 +169,34 @@ export default class ListContent extends React.Component {
 					)}
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
-      
+				<Modal 
+					isVisible={this.state.isVisible}
+					avoidKeyboard={true}
+					backdropColor={'white'}
+					backdropOpacity={.7}
+				>	
+					<View style={styles.content}>
+						<Button
+							title='Cancel'
+							buttonStyle={{ backgroundColor: 'blue', }}
+							titleStyle={{width: '45%'}}
+							onPress={this.handleCancel}
+						/>
+						<Button
+							title='Share'
+							buttonStyle={{ backgroundColor: 'blue', }}
+							titleStyle={{width: '45%'}}
+							onPress={this.handleCancel}
+						/>
+						<Button
+							title='Delete'
+							buttonStyle={{ backgroundColor: 'blue', }}
+							titleStyle={{width: '45%'}}
+							onPress={this.handleCancel}
+						/>
+					</View>
+				</Modal>	
+				
 				 {/* add new list input dialog box */}
 				 <View>
 					<Dialog.Container visible={this.state.addListDialogVisible}>
@@ -206,5 +236,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+	content: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
 });

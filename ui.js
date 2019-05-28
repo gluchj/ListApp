@@ -1,5 +1,5 @@
 import React, { Component, Linking }from 'react';
-import { Alert, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { Input, Button, } from 'react-native-elements';
 
 export default class ui extends React.Component {
