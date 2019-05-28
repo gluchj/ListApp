@@ -8,6 +8,7 @@ import ItemContent from './ItemContent';
 import UI from './ui';
 import Profile from './profile';
 import Buttons from './Buttons';
+import ManageList from './ManageList';
 
 /* add all screens to StackNavigator */
 const Stack = createStackNavigator({
@@ -15,6 +16,7 @@ const Stack = createStackNavigator({
   Users: { screen: UserContent },
 	Lists: { screen: ListContent },
 	Items: { screen: ItemContent },
+	ManageList: { screen: ManageList },
 	Profile: { screen: Profile },
 	},
 	{

@@ -57,18 +57,36 @@ export default class ListContent extends React.Component {
 		});
 	}
 
-	_longPressItem(item) {
-		//this.setState({ deleteDialogVisible: true });
-		this.setState({ isVisible: true });
-		this.setState({ selectedItem: item });
-	}
-	
 	_addButtonPress = () => {
 		this.setState({ addListDialogVisible: true });
 	}
+
+	_longPressItem(item) {
+		this.setState({ isVisible: true });
+		this.setState({ selectedItem: item });
+	}
+
+	_manageList = () => {
+	this.setState({ isVisible: false });
+		this.props.navigation.navigate('ManageList', {
+			user: this.state.username,
+			list: this.state.selectedItem,
+		});
+	}
+	
+	handleDeleteDialog = () => {
+		this.setState({ isVisible: false });
+		this.setState({ deleteDialogVisible: true });
+	}
+
 	
 	handleCancel = () => {
-		this.setState({ addListDialogVisible: false, deleteDialogVisible: false, isVisible: false, });
+		this.setState({ 
+			addListDialogVisible: false,
+			deleteDialogVisible: false,
+			isVisible: false,
+			selectedItem: '',
+		});
 	}
 	
 	handleCreate = () => {
@@ -117,7 +135,7 @@ export default class ListContent extends React.Component {
 		);
 	};
 
-
+	/* navigationOptions is used to set topbar icons & actions */
 	static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Lists',
@@ -172,26 +190,30 @@ export default class ListContent extends React.Component {
 				<Modal 
 					isVisible={this.state.isVisible}
 					avoidKeyboard={true}
-					backdropColor={'white'}
+					backdropColor={'#000'}
 					backdropOpacity={.7}
+					style={{ padding: 0 }}
 				>	
 					<View style={styles.content}>
 						<Button
-							title='Cancel'
-							buttonStyle={{ backgroundColor: 'blue', }}
-							titleStyle={{width: '45%'}}
-							onPress={this.handleCancel}
+							type='outline'
+							title='Manage'
+							buttonStyle={{ marginTop: 15, marginBottom: 15, }}
+							titleStyle={{width: '80%'}}
+							onPress={this._manageList}
 						/>
 						<Button
-							title='Share'
-							buttonStyle={{ backgroundColor: 'blue', }}
-							titleStyle={{width: '45%'}}
-							onPress={this.handleCancel}
-						/>
-						<Button
+							type='outline'
 							title='Delete'
-							buttonStyle={{ backgroundColor: 'blue', }}
-							titleStyle={{width: '45%'}}
+							buttonStyle={{ marginTop: 15, marginBottom: 15, }}
+							titleStyle={{width: '80%',  color: 'red'}}
+							onPress={this.handleDeleteDialog}
+						/>
+						<Button
+							type='outline'
+							title='Cancel'
+							buttonStyle={{ marginTop: 15, marginBottom: 15, }}
+							titleStyle={{width: '80%'}}
 							onPress={this.handleCancel}
 						/>
 					</View>
