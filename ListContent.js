@@ -220,7 +220,7 @@ export default class ListContent extends React.Component {
 				</Modal>	
 				
 				 {/* add new list input dialog box */}
-				 <View>
+				<View>
 					<Dialog.Container visible={this.state.addListDialogVisible}>
 						<Dialog.Title>Create List</Dialog.Title>
 						<Dialog.Input
@@ -238,7 +238,7 @@ export default class ListContent extends React.Component {
 				</View>
 				
 				{/* confirm list delete dialog box */}
-				 <View>
+				<View>
 					<Dialog.Container visible={this.state.deleteDialogVisible}>
 						<Dialog.Title>List delete</Dialog.Title>
 						<Dialog.Description>
