@@ -14,6 +14,7 @@ export default class ManageList extends React.Component {
 			isLoading: true,
 			deleteDialogVisible: false,
 			username: params.user.username,
+			endpoint: params.endpoint,
 			list: params.list,
 			dataSource: '',
 			user: '',
@@ -29,7 +30,7 @@ export default class ManageList extends React.Component {
 	/* fetch Lists for the selected user */
 	fetchData() {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members')
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members')
 			.then((response) => response.json())
 			.then((responseJson) => {
 				//if (responseJson.data === undefined || responseJson.data.length == 0) {
@@ -39,7 +40,6 @@ export default class ManageList extends React.Component {
 				else {
 					this.setState({ dataSource: responseJson.data });
 					this.setState({ isLoading: false });
-					//this.props.navigation.navigate('Lists', {data: responseJson.data, user: this.state.username});
 				}
 			})
 			.catch((error) => {
@@ -68,7 +68,7 @@ export default class ManageList extends React.Component {
 	handleDelete = () => {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
 			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json', },
 			body: JSON.stringify(this.state.user)
@@ -86,7 +86,7 @@ export default class ManageList extends React.Component {
 	/* add user to list via api call */
 	handleUpdate = () => {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
 			method: 'PUT',
 			headers: { 'Content-Type': 'text/plain', },
 			body: this.state.user								

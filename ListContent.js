@@ -14,6 +14,7 @@ export default class ListContent extends React.Component {
 			isLoading: false,
 			isVisible: false,
 			username: params.user.username,
+			endpoint: params.endpoint,
 			dataSource: '',
 			deleteDialogVisible: false,
 			addListDialogVisible: false,
@@ -31,7 +32,7 @@ export default class ListContent extends React.Component {
 	/* fetch Lists for the selected user */
 	fetchData() {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/')
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/')
 			.then((response) => response.json())
 			.then((responseJson) => {
 				//if (responseJson.data === undefined || responseJson.data.length == 0) {
@@ -54,7 +55,8 @@ export default class ListContent extends React.Component {
 	_selectItem(item) {
 		this.props.navigation.navigate('Items', {
 			user: this.state.username,
-			list: item.listID
+			list: item.listID,
+			endpoint: this.state.endpoint,
 		});
 	}
 
@@ -72,6 +74,7 @@ export default class ListContent extends React.Component {
 		this.props.navigation.navigate('ManageList', {
 			user: this.state.username,
 			list: this.state.selectedItem,
+			endpoint: this.state.endpoint,
 		});
 	}
 	
@@ -93,7 +96,7 @@ export default class ListContent extends React.Component {
 	handleCreate = () => {
 		this.setState({ isLoading: true });
 		this.setState({ addListDialogVisible: false });
-		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/', {
+		fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', },
 			body: JSON.stringify ({ "listName": this.state.listname })
@@ -111,7 +114,7 @@ export default class ListContent extends React.Component {
 	handleDelete = () => {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.selectedItem.listID, {
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.selectedItem.listID, {
 			method: 'DELETE',
 		})
 		.then((responseJson) => {

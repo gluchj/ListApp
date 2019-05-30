@@ -17,6 +17,7 @@ export default class ItemContent extends React.Component {
 			deleteDialogVisible: false,
 			isUpdate: false,
 			username: params.user,
+			endpoint: params.endpoint,
 			list: params.list,
 			dataSource: '',
 			//selectedItem: '',
@@ -34,7 +35,7 @@ export default class ItemContent extends React.Component {
 	/* fetchItems() retrieves all items for the selected list */
 	fetchItems() {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list)
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list)
 			.then((response) => response.json())
 			.then((responseJson) => {
 				//if (responseJson.data === undefined || responseJson.data.length == 0) {
@@ -88,8 +89,8 @@ export default class ItemContent extends React.Component {
 		/*TODO delete item from list, set state vars to '', close dialog box */
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username
-										+ '/lists/' + this.state.list + '/' + this.state.item_text, {
+		return fetch(this.state.endpoint + '/users/' + this.state.username
+								  + '/lists/' + this.state.list + '/' + this.state.item_text, {
 			method: 'DELETE',
 		})
 		.then((responseJson) => {
@@ -111,7 +112,7 @@ export default class ItemContent extends React.Component {
 		if(this.state.isUpdate) {
 			Method = 'PUT';
 		}
-		fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list, {
+		fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list, {
 			method: Method,
 			headers: { 'Content-Type': 'application/json', },
 			body: JSON.stringify ({ "listID": this.state.list,

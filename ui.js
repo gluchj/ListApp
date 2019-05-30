@@ -1,6 +1,7 @@
 import React, { Component, Linking }from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { Input, Button, } from 'react-native-elements';
+import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage } from 'react-native';
+import { Input, Button, CheckBox } from 'react-native-elements';
+//Server Address = 'http://67.172.87.92:8080/rest/api' + /users/
 
 export default class ui extends React.Component {
 	constructor(props) {
@@ -8,16 +9,75 @@ export default class ui extends React.Component {
 		this.state = {
 			username: '',
 			isLoading: false,
+			checked: false,
+			endpoint: '',
 		}
 	}
 	
+	/* check for saved preferences */
+	componentDidMount() {
+		this.getData();
+	}
+	
+	/* store username and server address with AsyncStorage */
+	storeData = async () => {
+		try {
+			await AsyncStorage.setItem('@user_name', this.state.username)
+			await AsyncStorage.setItem('@end_point', this.state.endpoint)
+		} catch (e) {
+			// saving error
+		}
+	}
+	
+	/* retrieve username and server address from AsyncStorage */
+	getData = async () => {
+		try {
+			const user = await AsyncStorage.getItem('@user_name')
+			const srvr = await AsyncStorage.getItem('@end_point')
+			if(user !== null) {
+				// value previously stored
+				this.setState({ username: user, checked: true, })
+			}
+			if(srvr !== null) {
+				this.setState({ endpoint: srvr, })
+			}
+		} catch(e) {
+			// error reading value
+		}
+	}
+	
+	/* reset AsyncStorage saved values to '' */
+	forgetData = async () => {
+		try {
+			await AsyncStorage.removeItem('@user_name');
+			await AsyncStorage.removeItem('@end_point');
+		} catch (e) {
+			// saving error
+		}
+	}
+
 	_handleNameChange = (username) => {
 		this.setState({username});
 	}
 	
+	_handleServerChange = (endpoint) => {
+		this.setState({endpoint});
+	}
+	
+	_boxChecked = () => {
+		this.setState({ checked: true })
+	}
+	
+	/* called on login, check for user exist, nav to List screen if so */
 	_onButtonPress = () => {
 		this.setState({ isLoading: true });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username)
+		if(this.state.checked) {
+			this.storeData();
+		}
+		else {
+			this.forgetData();
+		}
+		return fetch(this.state.endpoint + '/users/' + this.state.username)
 			.then((response) => response.json())
 			.then((responseJson) => {
 				if (responseJson.data === undefined || responseJson.data.length == 0 || responseJson.data.length > 1) {
@@ -25,7 +85,7 @@ export default class ui extends React.Component {
 				}
 				else {
 					this.setState({ isLoading: false });
-					this.props.navigation.navigate('Lists', { user: responseJson.data[0] });
+					this.props.navigation.navigate('Lists', { user: responseJson.data[0], endpoint: this.state.endpoint });
 				}
 			})
 			.catch((error) => {
@@ -35,7 +95,6 @@ export default class ui extends React.Component {
 	}
 	
 	render() {
-		
 		if(this.state.isLoading) {
 			return(
 				<View style={styles.container}>
@@ -43,9 +102,8 @@ export default class ui extends React.Component {
 				</View>
 			)
 		}
-		
     return (
-		<View style={styles.container}>
+		<View style={styles.container} >
 			{/* Application title text */}
 			<Text style={styles.title}>
 				List
@@ -56,6 +114,7 @@ export default class ui extends React.Component {
 			<Input
 				label='Username'
 				placeholder='Enter username'
+				value={this.state.username}
 				containerStyle={{ marginBottom: 15 }}
 				onChangeText={this._handleNameChange}
 			/>
@@ -69,7 +128,15 @@ export default class ui extends React.Component {
 				label='Server'
 				placeholder='https://hostname.com:port/rest/api'
 				containerStyle={{ marginBottom: 15 }}
-				//value='http://67.172.87.92:8080/rest/api/users/'
+				value={this.state.endpoint}
+				onChangeText={this._handleServerChange}
+			/>
+			<CheckBox
+				center
+				checkedColor='green'
+				title='Remember Settings'
+				checked={this.state.checked}
+				onPress={() => this.setState({checked: !this.state.checked})}
 			/>
 			<Button
 				title='LOGIN'
