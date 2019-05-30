@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, ActivityIndicator, Text, View, ScrollView, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, ScrollView, TouchableHighlight } from 'react-native';
 import { ListItem, Button, Input, Card } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
 import Modal from 'react-native-modal';
@@ -12,9 +12,11 @@ export default class ManageList extends React.Component {
 		const { params } = this.props.navigation.state;
 		this.state = { 
 			isLoading: true,
+			deleteDialogVisible: false,
 			username: params.user.username,
 			list: params.list,
 			dataSource: '',
+			user: '',
 		}
 	}
 	
@@ -46,42 +48,30 @@ export default class ManageList extends React.Component {
 			});
 	}
 
-	/* load next screen passing user touch selection */
-	_selectItem(item) {
-		this.props.navigation.navigate('Items', {
-			user: this.state.username,
-			list: item.listID
-		});
-	}
-
-	_longPressItem(item) {
-		this.setState({ isVisible: true });
-		this.setState({ selectedItem: item });
+	changeName = (name) => {
+		this.setState({ user: name });
 	}
 	
-	handleDeleteDialog = () => {
-		this.setState({ isVisible: false });
+	handleDeleteDialog(u) {
+		this.setState({ user: u });
 		this.setState({ deleteDialogVisible: true });
-	}
-	
-	_addButtonPress = () => {
-		this.setState({ addListDialogVisible: true });
 	}
 	
 	handleCancel = () => {
 		this.setState({ 
-			addListDialogVisible: false,
 			deleteDialogVisible: false,
-			isVisible: false,
-			selectedItem: '',
+			user: '',
 		});
 	}
 	
+	/* remove user from list via api call */
 	handleDelete = () => {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
-		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.selectedItem.listID, {
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
 			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json', },
+			body: JSON.stringify(this.state.user)
 		})
 		.then((responseJson) => {
 			this.fetchData();
@@ -92,13 +82,33 @@ export default class ManageList extends React.Component {
 			this.setState({ isLoading: false });
 		});
 	}
+	
+	/* add user to list via api call */
+	handleUpdate = () => {
+		this.setState({ isLoading: true });
+		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username + '/lists/' + this.state.list.listID + '/members', {
+			method: 'PUT',
+			headers: { 'Content-Type': 'text/plain', },
+			body: this.state.user								
+		})
+		.then((responseJson) => {
+			this.setState({ user: '' });
+			this.fetchData();
+			this.setState({ isLoading: false });
+		})
+		.catch((error) => {
+			this.setState({ user: '' });
+			console.error(error);
+			this.setState({ isLoading: false });
+		});
+	}
 
 	/* returns the remove link for each shared user */
-	renderRightElement() {
+	renderRightElement(u) {
 		return (
 		<Text
 			style={{color: 'red'}}
-			onPress={ () => { } }
+			onPress={ () => this.handleDeleteDialog(u) }
 		>
 			Remove
 		</Text>
@@ -108,7 +118,7 @@ export default class ManageList extends React.Component {
 	/* navigationOptions is used to set topbar icons & actions */
 	static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'Manage List',
+      title: 'Share Settings',
 		}
 	}
 
@@ -156,7 +166,7 @@ export default class ManageList extends React.Component {
 								title={u.username}
 								style={{ alignItems: 'center', }}
 								leftIcon={{ name: 'account-circle' }}						
-								rightElement={this.renderRightElement()}
+								rightElement={this.renderRightElement(u)}
 							/>
 						);
 					})
@@ -168,16 +178,36 @@ export default class ManageList extends React.Component {
 						<Input
 							placeholder='Add new user'
 							containerStyle={{ width: '80%' }}
+							onChangeText={this.changeName}
 						/>
 						<Icon
 							name='plus'
 							size={30}
 							color='green'
-
 							onPress={this.handleUpdate}
 						/>
 					</View>
 				</Card>
+				
+				{/* confirm list delete dialog box */}
+				<View>
+					<Dialog.Container visible={this.state.deleteDialogVisible}>
+						<Dialog.Title>Item delete</Dialog.Title>
+						<Dialog.Description>
+							Are you sure you want to remove this user?
+						</Dialog.Description>
+						<Text 
+							style={{ 
+								fontSize: 16,
+								color: 'red',
+								marginLeft: 13 
+							}}>
+							{this.state.item_text}
+						</Text>
+						<Dialog.Button label="Cancel" onPress={this.handleCancel} />
+						<Dialog.Button label="Delete" onPress={this.handleDelete} />
+					</Dialog.Container>
+				</View>
 			
 			</View>
     );

@@ -4,6 +4,7 @@ import { ListItem, Button, Input } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavigationEvents } from 'react-navigation';
 
 export default class ListContent extends React.Component {
 	constructor(props) {
@@ -171,6 +172,10 @@ export default class ListContent extends React.Component {
 		
     return (
       <View style={styles.container}>
+				<NavigationEvents
+					onWillFocus={payload => this.fetchData()}
+				/>
+			
 				<FlatList
 					data={ this.state.dataSource }
 					keyExtractor={ item => item.listID }
@@ -197,7 +202,7 @@ export default class ListContent extends React.Component {
 					<View style={styles.content}>
 						<Button
 							type='outline'
-							title='Manage'
+							title='Share'
 							buttonStyle={{ marginTop: 15, marginBottom: 15, }}
 							titleStyle={{width: '80%'}}
 							onPress={this._manageList}
