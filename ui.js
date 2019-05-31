@@ -85,6 +85,8 @@ export default class ui extends React.Component {
 				}
 				else {
 					this.setState({ isLoading: false });
+					global.user = this.state.username;
+					global.endpoint = this.state.endpoint;
 					this.props.navigation.navigate('Lists', { user: responseJson.data[0], endpoint: this.state.endpoint });
 				}
 			})
@@ -92,6 +94,16 @@ export default class ui extends React.Component {
 				console.error(error);
 				this.setState({ isLoading: false });
 			});
+	}
+	
+	static navigationOptions = {
+		headerStyle: {
+			backgroundColor: 'orangered',
+		},
+		headerTintColor: '#fff',
+		headerTitleStyle: {
+			flex: 1,
+		},
 	}
 	
 	render() {

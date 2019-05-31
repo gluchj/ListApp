@@ -6,26 +6,51 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default class drawer extends React.Component {
 	constructor(props) {
 		super(props);
-		const {params} = this.props.navigation.state;
-		console.log(params);
+
 		this.state = {
-			username: '',
 			isLoading: false,
+			endpoint: global.endpoint,
+			username: global.user,
+			user: '',
 		}
+	}
+	
+	componentDidMount() {
+		this.fetchData();
 	}
 	
 	handleUpdate = () => {
 		//this.props.navigation.openDrawer();
 	}
 	
-		handleCancel = () => {
+	handleCancel = () => {
 		this.props.navigation.navigate('Lists');
 	}
 	
-/*	_handleNameChange = (username) => {
+	_handleNameChange = (username) => {
 		this.setState({username});
 	}
 	
+	fetchData() {
+		this.setState({ isLoading: true });
+		return fetch(this.state.endpoint + '/users/' + this.state.username)
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.data === undefined || responseJson.data.length == 0 || responseJson.data.length > 1) {
+					this.setState({ isLoading: false });
+				}
+				else {
+					this.setState({ user: responseJson.data[0] });
+					this.setState({ isLoading: false });
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				this.setState({ isLoading: false });
+			});
+	}
+
+/*	
 	_onButtonPress = () => {
 		this.setState({ isLoading: true });
 		return fetch('http://67.172.87.92:8080/rest/api/users/' + this.state.username)
@@ -44,12 +69,13 @@ export default class drawer extends React.Component {
 			});
 	}
 */
+
 	/* remove default navigation header */
 	static navigationOptions = {
 		header: null
 	};
+	
 	render() {
-		
 		if(this.state.isLoading) {
 			return(
 				<View style={styles.container}>
@@ -57,7 +83,6 @@ export default class drawer extends React.Component {
 				</View>
 			)
 		}
-		
     return (
 		<View style={styles.container}>
 			<View style={ styles.top }>
@@ -67,7 +92,7 @@ export default class drawer extends React.Component {
 						User Profile
 					</Text>
 					<Text style={styles.name}>
-						gluchj
+						{this.state.user.username}
 					</Text>
 				</View>
 			</View>
@@ -76,24 +101,29 @@ export default class drawer extends React.Component {
 					label='First'
 					placeholder='Enter your firstname'
 					containerStyle={{ marginBottom: 15 }}
+					value={this.state.user.fname}
 					onChangeText={this._handleNameChange}
 				/>
 				<Input
 					label='Last'
 					placeholder='Enter your lastname'
 					containerStyle={{ marginBottom: 15 }}
+					value={this.state.user.lname}
 					onChangeText={this._handleNameChange}
 				/>
 				<Input
 					label='Email'
 					placeholder='Enter your email address'
 					containerStyle={{ marginBottom: 15 }}
+					value={this.state.user.email}
 					onChangeText={this._handleNameChange}
 				/>
 				<Input
 					label='Password'
+					secureTextEntry={true}
 					placeholder='Enter password'
 					containerStyle={{ marginBottom: 15 }}
+					value={this.state.user.password}
 					secureTextEntry={true}
 				/>
 			</View>
