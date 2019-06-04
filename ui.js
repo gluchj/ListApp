@@ -1,4 +1,4 @@
-import React, { Component, Linking }from 'react';
+import React, { Component, Linking } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage } from 'react-native';
 import { Input, Button, CheckBox } from 'react-native-elements';
 //Server Address = 'http://67.172.87.92:8080/rest/api' + /users/
@@ -56,19 +56,22 @@ export default class ui extends React.Component {
 		}
 	}
 
+	/* onChangeText of username input field */
 	_handleNameChange = (username) => {
 		this.setState({username});
 	}
 	
+	/* onChangeText of server input field */
 	_handleServerChange = (endpoint) => {
 		this.setState({endpoint});
 	}
 	
+	/* onPress for remember settings checkbox */
 	_boxChecked = () => {
-		this.setState({ checked: true })
+		this.setState({checked: !this.state.checked})
 	}
 	
-	/* called on login, check for user exist, nav to List screen if so */
+	/* called on login, check if username exists, nav to List screen if so */
 	_onButtonPress = () => {
 		this.setState({ isLoading: true });
 		if(this.state.checked) {
@@ -96,6 +99,7 @@ export default class ui extends React.Component {
 			});
 	}
 	
+	/* set screen header */
 	static navigationOptions = {
 		headerStyle: {
 			backgroundColor: 'orangered',
@@ -106,6 +110,7 @@ export default class ui extends React.Component {
 		},
 	}
 	
+	/* render activity indicator or login screen */
 	render() {
 		if(this.state.isLoading) {
 			return(
@@ -148,7 +153,7 @@ export default class ui extends React.Component {
 				checkedColor='green'
 				title='Remember Settings'
 				checked={this.state.checked}
-				onPress={() => this.setState({checked: !this.state.checked})}
+				onPress={this._boxChecked}
 			/>
 			<Button
 				title='LOGIN'

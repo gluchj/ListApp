@@ -20,7 +20,6 @@ export default class ItemContent extends React.Component {
 			endpoint: params.endpoint,
 			list: params.list,
 			dataSource: '',
-			//selectedItem: '',
 			item_text: '',
 			qty: '',
 			note: '',
@@ -53,14 +52,17 @@ export default class ItemContent extends React.Component {
 			});
 	}
 	
+	/* onChangeText for item_text (name) input */
 	changeItemName = (name) => {
 		this.setState({ item_text: name });
 	}
 	
+	/* onChangeText for item qty input */
 	changeItemQty = (qty) => {
 		this.setState({ qty: qty});
 	}
 	
+	/* onChangeText for item note input */
 	changeItemNote = (note) => {
 		this.setState({ note: note });
 	}
@@ -73,10 +75,12 @@ export default class ItemContent extends React.Component {
 		this.setState({ isUpdate: true, });
 	}
 	
+	/* show new item modal when + is clicked */
 	_addItem() {
 		this.setState({ isVisible: true, });
 	}
 	
+	/* hide all modal/dialog boxes on cancel */
 	handleCancel = () => {
 		this.setState({ isVisible: false, });
 		this.setState({ deleteDialogVisible: false, });
@@ -85,8 +89,8 @@ export default class ItemContent extends React.Component {
 		this.setState({ item_text: '', qty: '', note: '' });
 	}
 	
+	/* api call to delete selected item */
 	handleDelete = () => {
-		/*TODO delete item from list, set state vars to '', close dialog box */
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
 		return fetch(this.state.endpoint + '/users/' + this.state.username
@@ -105,6 +109,7 @@ export default class ItemContent extends React.Component {
 		});
 	}
 	
+	/* api call to add item (POST) or update item (PUT) */
 	handleCreate = () => {
   	let Method = 'POST';
 		this.setState({ isLoading: true });
@@ -133,11 +138,8 @@ export default class ItemContent extends React.Component {
 			this.setState({ isUpdate: false });
 		});
 	}
-	
-	_onButtonPress = () => {
-		this.setState({ isVisible: false, });
-	}
-	
+
+	/* display item details modal with selected item */
 	_longPressItem(item) {
 		this.setState({ deleteDialogVisible: true });
 		//this.setState({ selectedItem: item });
@@ -151,6 +153,7 @@ export default class ItemContent extends React.Component {
 		);
 	};
 	
+	/* set topbar nav options i.e. just the title in this case */
 	static navigationOptions = { title: 'Items', };
 	
 	/* renders API fetch data once retrieved */
@@ -182,7 +185,7 @@ export default class ItemContent extends React.Component {
 					)}
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
-				
+				{/* modal to add/update item with details */}
 				<Modal 
 					isVisible={this.state.isVisible}
 					avoidKeyboard={true}
@@ -246,7 +249,8 @@ export default class ItemContent extends React.Component {
 						<Dialog.Button label="Delete" onPress={this.handleDelete} />
 					</Dialog.Container>
 				</View>
-
+				
+				{/* floating + button to add new item to list */}
 				<ActionButton buttonColor='orangered' onPress={ () => this._addItem()} />
       </View>
     );

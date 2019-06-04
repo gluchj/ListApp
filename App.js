@@ -1,23 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerItems, SafeAreaView } from 'react-navigation';
-//import UserContent from './UserContent';
-//import Login from './Login';
 import ListContent from './ListContent';
 import ItemContent from './ItemContent';
 import UI from './ui';
 import Profile from './profile';
-//import Buttons from './Buttons';
 import ManageList from './ManageList';
+import CustomDrawerComponent from './CustomDrawerComponent';
 
-/* add all screens to StackNavigator */
+/* add screens to StackNavigator */
 const Stack = createStackNavigator({
-	//Home: { screen: UI },
-  //Users: { screen: UserContent },
 	Lists: { screen: ListContent },
 	Items: { screen: ItemContent },
 	ManageList: { screen: ManageList },
-	//Profile: { screen: Profile },
 	},
 	{
 		defaultNavigationOptions: {
@@ -32,17 +27,18 @@ const Stack = createStackNavigator({
 	}
 );
 
-/* add screen stack to DrawerNavigator */
+/* add screen stack & Profile screen to DrawerNavigator */
 const Drawer = createDrawerNavigator({
 	Profile: { screen: Profile },
 	Stack: Stack,
 	},
 	{
 		//initialRouteName: 'Stack',
-		//contentComponent: CustomDrawerComponent,
+		contentComponent: CustomDrawerComponent,
 	},
 );
 
+/* create RootStack, add Login screen and all other stacks to it */
 const RootStack = createStackNavigator({
 	Home: {screen: UI },
 	Drawer: {
@@ -51,6 +47,8 @@ const RootStack = createStackNavigator({
 	}
 });
 
+/* create custom nav drawer with profile screen and logout option */
+/*
 const CustomDrawerComponent = (props) => (
   <ScrollView>
 		<Text>Welcome {this.props.navigation.state.params.userName} </Text>
@@ -59,6 +57,7 @@ const CustomDrawerComponent = (props) => (
     </SafeAreaView>
   </ScrollView>
 );
+*/
 
 const styles = StyleSheet.create({
   container: {
@@ -66,6 +65,5 @@ const styles = StyleSheet.create({
   },
 });
 
-//const App = createAppContainer(Drawer);
 const App = createAppContainer(RootStack);
 export default App;

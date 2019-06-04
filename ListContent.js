@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { ListItem, Button, Input } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
 import Modal from 'react-native-modal';
@@ -35,14 +35,12 @@ export default class ListContent extends React.Component {
 		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/')
 			.then((response) => response.json())
 			.then((responseJson) => {
-				//if (responseJson.data === undefined || responseJson.data.length == 0) {
 				if (responseJson.data === undefined) {
 					this.setState({ isLoading: false });
 				}
 				else {
 					this.setState({ dataSource: responseJson.data });
 					this.setState({ isLoading: false });
-					//this.props.navigation.navigate('Lists', {data: responseJson.data, user: this.state.username});
 				}
 			})
 			.catch((error) => {
@@ -60,15 +58,18 @@ export default class ListContent extends React.Component {
 		});
 	}
 
+	/* display add List dialog box on + press */
 	_addButtonPress = () => {
 		this.setState({ addListDialogVisible: true });
 	}
 
+	/* display list options dialog (share, delete, cancel) on long press */
 	_longPressItem(item) {
 		this.setState({ isVisible: true });
 		this.setState({ selectedItem: item });
 	}
 
+	/* display share modal when user presses "share" button */
 	_manageList = () => {
 	this.setState({ isVisible: false });
 		this.props.navigation.navigate('ManageList', {
@@ -78,12 +79,13 @@ export default class ListContent extends React.Component {
 		});
 	}
 	
+	/* display list deletion confirmation box */
 	handleDeleteDialog = () => {
 		this.setState({ isVisible: false });
 		this.setState({ deleteDialogVisible: true });
 	}
 
-	
+	/* any cancel button press hides all dialogs/modals */
 	handleCancel = () => {
 		this.setState({ 
 			addListDialogVisible: false,
@@ -93,6 +95,7 @@ export default class ListContent extends React.Component {
 		});
 	}
 	
+	/* perform rest call to endpoint for new list creation */
 	handleCreate = () => {
 		this.setState({ isLoading: true });
 		this.setState({ addListDialogVisible: false });
@@ -111,6 +114,7 @@ export default class ListContent extends React.Component {
 		});
 	}
 	
+	/* perform rest call to endpoint for list deletion */
 	handleDelete = () => {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
@@ -127,6 +131,7 @@ export default class ListContent extends React.Component {
 		});
 	}
 	
+	/* onChangeText handler for new list input box */
 	changeText = (listname) => {
 		this.setState({ listname: listname });
 	}
@@ -172,7 +177,6 @@ export default class ListContent extends React.Component {
 				</View>
 			)
 		}
-		
     return (
       <View style={styles.container}>
 				<NavigationEvents
@@ -195,6 +199,7 @@ export default class ListContent extends React.Component {
 					)}
 					ItemSeparatorComponent={this.renderSeparator}
 				/>
+				{/* list options menu for share and delete */}
 				<Modal 
 					isVisible={this.state.isVisible}
 					avoidKeyboard={true}

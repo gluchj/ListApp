@@ -24,7 +24,6 @@ export default class ManageList extends React.Component {
 	/* Load Flatlist with user 'List' data */	
 	componentDidMount() {
 		this.fetchData();
-	//	this.props.navigation.setParams({ addList: this._addButtonPress });
 	}
 	
 	/* fetch Lists for the selected user */
@@ -48,15 +47,18 @@ export default class ManageList extends React.Component {
 			});
 	}
 
+	/* onChangeText for share with new member input */
 	changeName = (name) => {
 		this.setState({ user: name });
 	}
 	
+	/* show delete user from list dialog box */
 	handleDeleteDialog(u) {
 		this.setState({ user: u });
 		this.setState({ deleteDialogVisible: true });
 	}
 	
+	/* hide dialogs and set user to null on cancel */
 	handleCancel = () => {
 		this.setState({ 
 			deleteDialogVisible: false,
@@ -134,6 +136,7 @@ export default class ManageList extends React.Component {
 		
     return (
       <View style={styles.container}>
+				{/* topmost card - list details */}
 				<Card
 					title='LIST'
 					titleStyle={{ fontSize: 16 }} >
@@ -157,6 +160,7 @@ export default class ManageList extends React.Component {
 					</View>
 				</Card>
 				
+				{/* current list members card */}
 				<Card	title='USERS' titleStyle={{ fontSize: 16, }}>
 				{
 					this.state.dataSource.map((u) => {
@@ -172,7 +176,8 @@ export default class ManageList extends React.Component {
 					})
 				}
 				</Card>
-			
+
+				{/* share with new user card */}
 				<Card>
 					<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 						<Input
