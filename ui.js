@@ -1,5 +1,5 @@
 import React, { Component, Linking } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { Input, Button, CheckBox } from 'react-native-elements';
 //Server Address = 'http://67.172.87.92:8080/rest/api' + /users/
 
@@ -120,57 +120,61 @@ export default class ui extends React.Component {
 			)
 		}
     return (
-		<View style={styles.container} >
-			{/* Application title text */}
-			<Text style={styles.title}>
-				List
-				<Text style={{color:'gray'}}>.App
+
+		<KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
+			<View style={styles.container}>
+				{/* Application title text */}
+				<Text style={styles.title}>
+					List
+					<Text style={{color:'gray'}}>.App
+					</Text>
 				</Text>
-			</Text>
-		
-			<Input
-				label='Username'
-				placeholder='Enter username'
-				value={this.state.username}
-				containerStyle={{ marginBottom: 15 }}
-				onChangeText={this._handleNameChange}
-			/>
-			<Input
-				label='Password'
-				placeholder='Enter password'
-				containerStyle={{ marginBottom: 15 }}
-				secureTextEntry={true}
-			/>
-			<Input
-				label='Server'
-				placeholder='https://hostname.com:port/rest/api'
-				containerStyle={{ marginBottom: 15 }}
-				value={this.state.endpoint}
-				onChangeText={this._handleServerChange}
-			/>
-			<CheckBox
-				center
-				checkedColor='green'
-				title='Remember Settings'
-				checked={this.state.checked}
-				onPress={this._boxChecked}
-			/>
-			<Button
-				title='LOGIN'
-				buttonStyle={styles.button}
-				titleStyle={{width: '100%'}}
-				onPress={this._onButtonPress}
-			/>
-			<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('#')}>
-				Not a Member?
-			</Text>
-		</View>
+				<Input
+					label='Username'
+					placeholder='Enter username'
+					value={this.state.username}
+					containerStyle={{ marginBottom: 15 }}
+					onChangeText={this._handleNameChange}
+				/>
+				<Input
+					label='Password'
+					placeholder='Enter password'
+					containerStyle={{ marginBottom: 15 }}
+					secureTextEntry={true}
+				/>
+				<Input
+					label='Server'
+					placeholder='https://hostname.com:port/rest/api'
+					containerStyle={{ marginBottom: 15 }}
+					value={this.state.endpoint}
+					onChangeText={this._handleServerChange}
+				/>
+				<CheckBox
+					center
+					checkedColor='green'
+					title='Remember Settings'
+					checked={this.state.checked}
+					onPress={this._boxChecked}
+				/>
+				<Button
+					title='LOGIN'
+					buttonStyle={styles.button}
+					titleStyle={{width: '100%'}}
+					onPress={this._onButtonPress}
+				/>
+				<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('#')}>
+					Not a Member?
+				</Text>
+				<View style={{ flex: 1 }} />
+			</View>
+		</KeyboardAvoidingView>
 		);
 	}	
 }
 
 const styles = StyleSheet.create({
   container: {
+		justifyContent: 'center',
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { Text, View, StyleSheet, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 //<ImageBackground source={require('./assets/icon.png')} style={{ width: 280, height: 220}}></ImageBackground>
 
@@ -18,18 +18,23 @@ export default class CustomDrawerComponent extends Component {
 					</Text>
 				</View>
 				
-				<View style={{ flexDirection: 'row', marginLeft: 20,}}>	
-					<Icon 
-						name="account-circle"
-						size={26}
-						color="darkgrey"
-					/>	
-					<Text style={styles.menuitem} onPress={ () => { this.props.navigation.navigate('Profile') }}>
-						Profile
-					</Text>
-				</View>
+				<TouchableHighlight 
+					underlayColor='#dddddd'
+					onPress={ () => this.props.navigation.navigate('Profile')}
+				>
+					<View style={{ flexDirection: 'row', marginLeft: 20}}>	
+						<Icon 
+							name="account-circle"
+							size={26}
+							color="darkgrey"
+						/>	
+						<Text style={styles.menuitem}>
+							Profile
+						</Text>
+					</View>
+				</TouchableHighlight>	
 				
-				<View style={{ flexDirection: 'row', marginLeft: 20, }}>	
+				<View style={{ flexDirection: 'row', marginLeft: 20}}>	
 					<Icon 
 						name="info"
 						size={26}
@@ -39,7 +44,7 @@ export default class CustomDrawerComponent extends Component {
 						About
 					</Text>
 				</View>
-				
+
 				<View style={{ flexDirection: 'row', marginLeft: 20, }}>	
 					<Icon 
 						name="power-settings-new"
@@ -58,6 +63,8 @@ export default class CustomDrawerComponent extends Component {
 const styles = StyleSheet.create({
 	container: {
 		alignItems: 'center',
+		borderBottomWidth: 1,
+		borderColor: '#dddddd',
 	},
 	header: {
 		paddingTop: 20,

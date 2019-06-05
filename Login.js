@@ -1,15 +1,9 @@
 import React, {Component }from 'react';
-import { StyleSheet, Text, TextInput, Button } from 'react-native';
-import { Alert, View, Image, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 export default class Login extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { name: '' }
-		this.state = { password: '' }
-		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handlePasswordChange = this.handlePasswordChange.bind(this);
-		this._onPressButton = this._onPressButton.bind(this);
 	}
 	
 	handleNameChange(name) {
@@ -29,8 +23,9 @@ export default class Login extends React.Component {
 	
   render() {
     return (
-      <View style={styles.container}>
-			
+
+			<KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}> 
+			<View style={{ justifyContent: 'flex-end' }}>
 				{/* Application title text */}
 				<Text style={styles.title}>
 					List
@@ -42,17 +37,10 @@ export default class Login extends React.Component {
 				<TextInput
 					style={styles.input}
 					placeholder="Username"
-					onBlur={Keyboard.dismiss}
-					value={this.state.name}
-					onChangeText={this.handleNameChange}
 				/>
 				<TextInput 
 					style={styles.input}
-					secureTextEntry={true}
 					placeholder="Password"
-					onBlur={Keyboard.dismiss}
-					value={this.state.password}
-					onChangeText={this.handlePasswordChange}
 				/>
 				
 				<View style={{width: "80%" }}>
@@ -63,6 +51,7 @@ export default class Login extends React.Component {
 					/>
 				</View>
 			</View>
+			</KeyboardAvoidingView>
     );
   }
 }
@@ -79,7 +68,8 @@ const styles = StyleSheet.create({
 		color: 'orangered',
 		fontWeight: 'bold',
 		fontSize: 35,
-		paddingBottom: 30
+		paddingTop: 100,
+		paddingBottom: 130
 	},
 	
 	input: {

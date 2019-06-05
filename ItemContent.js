@@ -94,7 +94,7 @@ export default class ItemContent extends React.Component {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
 		return fetch(this.state.endpoint + '/users/' + this.state.username
-								  + '/lists/' + this.state.list + '/' + this.state.item_text, {
+								  + '/lists/' + this.state.list + '/' + encodeURIComponent(this.state.item_text), {
 			method: 'DELETE',
 		})
 		.then((responseJson) => {

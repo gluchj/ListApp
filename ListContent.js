@@ -118,7 +118,7 @@ export default class ListContent extends React.Component {
 	handleDelete = () => {
 		this.setState({ isLoading: true });
 		this.setState({ deleteDialogVisible: false });
-		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.selectedItem.listID, {
+		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + encodeURIComponent(this.state.selectedItem.listID), {
 			method: 'DELETE',
 		})
 		.then((responseJson) => {
@@ -194,6 +194,7 @@ export default class ListContent extends React.Component {
 						>
 							<ListItem
 								title={ `${item.list_name}` }
+								titleStyle={ styles.list }
 							/>
 						</TouchableHighlight>
 					)}
@@ -272,6 +273,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+	list: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		color: '#474A51',
+	},
 	content: {
     backgroundColor: 'white',
     padding: 22,

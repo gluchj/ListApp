@@ -7,6 +7,7 @@ import UI from './ui';
 import Profile from './profile';
 import ManageList from './ManageList';
 import CustomDrawerComponent from './CustomDrawerComponent';
+import Login from './Login';
 
 /* add screens to StackNavigator */
 const Stack = createStackNavigator({
@@ -41,6 +42,7 @@ const Drawer = createDrawerNavigator({
 /* create RootStack, add Login screen and all other stacks to it */
 const RootStack = createStackNavigator({
 	Home: {screen: UI },
+	//Home: {screen: Login },
 	Drawer: {
 		screen: Drawer,
 		navigationOptions: { header: null }
