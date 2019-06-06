@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { Text, View, StyleSheet, ImageBackground, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Dialog from 'react-native-dialog';
-//<ImageBackground source={require('./assets/icon.png')} style={{ width: 280, height: 220}}></ImageBackground>
 
 export default class CustomDrawerComponent extends Component {
 
@@ -61,16 +60,21 @@ export default class CustomDrawerComponent extends Component {
 				</TouchableHighlight>	
 				
 				{/* About menu link */}
-				<View style={{ flexDirection: 'row', marginLeft: 20}}>	
-					<Icon 
-						name="info"
-						size={26}
-						color="darkgrey"
-					/>	
-					<Text style={styles.menuitem}>
-						About
-					</Text>
-				</View>
+				<TouchableHighlight 
+					underlayColor='#dddddd'
+					onPress={ () => this.props.navigation.navigate('About')}
+				>
+					<View style={{ flexDirection: 'row', marginLeft: 20}}>	
+						<Icon 
+							name="info"
+							size={26}
+							color="darkgrey"
+						/>	
+						<Text style={styles.menuitem}>
+							About
+						</Text>
+					</View>
+				</TouchableHighlight>
 
 				{/* Logout menu link */}
 				<TouchableHighlight 

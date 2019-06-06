@@ -1,5 +1,5 @@
-import React, { Component, Linking } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, KeyboardAvoidingView, Linking } from 'react-native';
 import { Input, Button, CheckBox } from 'react-native-elements';
 //Server Address = 'http://67.172.87.92:8080/rest/api' + /users/
 
@@ -162,7 +162,7 @@ export default class ui extends React.Component {
 					titleStyle={{width: '100%'}}
 					onPress={this._onButtonPress}
 				/>
-				<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('#')}>
+				<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('https://jrg-dev.com')}>
 					Not a Member?
 				</Text>
 				<View style={{ flex: 1 }} />
