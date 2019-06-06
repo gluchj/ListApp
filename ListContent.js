@@ -4,7 +4,7 @@ import { ListItem, Button, Input } from 'react-native-elements';
 import Dialog from 'react-native-dialog';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, StackActions, NavigationActions } from 'react-navigation';
 
 export default class ListContent extends React.Component {
 	constructor(props) {
