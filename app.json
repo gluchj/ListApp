@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "List.App",
-    "slug": "TestProject3",
+		"slug": "ListApp",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
