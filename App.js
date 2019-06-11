@@ -46,5 +46,6 @@ const RootStack = createStackNavigator({
 	}
 });
 
+/* create App container and export */
 const App = createAppContainer(RootStack);
 export default App;

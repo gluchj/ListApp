@@ -1,0 +1,143 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+/* rules for all layouts and screen sizes */
+/*
+.page {
+	display: flex;
+	flex-wrap: wrap;
+}
+*/
+
+.orange { color: #FF4500; }
+
+.header {
+	display: flex;
+	flex-direction: column;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	padding: 20px;
+	flex-wrap: wrap;
+	font-size: 48.0pt;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	background-color: #FFF; 
+	color: #FF4500;
+	width: 100%;
+}
+
+.menu {
+	font-size: 12.0pt;
+	padding: 10px 0px 10px 50px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	background-color: #FF4500; 
+	width: 100%;
+	align-items: center;
+}
+
+.menu a {
+	text-decoration: none;
+	color: #FFF;
+	margin-right: 80px;
+}
+
+.menu a:hover {
+	color: #333333;
+	font-weight: bold;
+}
+/*	border-bottom: 1px solid #FF4500; */
+
+.main-content {
+	display: flex;
+	height: 450px;
+}
+
+.main-content.left {
+	flex-direction: column;
+	max-width: 700px;
+	padding: 50px 0px 35px 25px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 10pt;
+	line-height: 1.4
+}
+
+.main-content.left #features {
+	margin-top: 50px;
+	margin-bottom: 20px;
+	font-size: 16pt;
+	font-weight: bold;
+	color: #FF4500;
+}
+
+.main-content.left ul {
+	margin-left: 30px;
+	list-style-type: none;
+}
+
+.main-content.left li {
+	color: #3e495b;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+.main-content.left i {
+	margin-bottom: 8px;
+	margin-right: 5px;
+	color: #FF4500;
+	font-size: 16pt;
+}
+
+.main-content.right {
+	flex-direction: column;
+	padding: 50px 0px 35px 25px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	width: 400px;
+}
+
+.login {
+	background-color: #CCCCCC;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+	padding: 20px 15px;
+}
+
+.input {
+	width: 200px;
+	background-color: #E5E5E5;
+	-webkit-appearance: none; 
+	-moz-appearance: none; 
+  /*  border: 2px solid #eee; /* Here */
+	border: none;
+}
+
+.footer {
+	background-color: #3e495b;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	color: #FFF;
+	padding: 35px 100px 35px 100px;
+}
+
+.footer-links {
+	display: flex;
+	justify-content: space-between;
+}
+
+.footer-links a {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.footer-links a:hover {
+	color: #FF4500;
+}
+
+.footer-legal {
+	text-align: center;
+	padding-top: 20px;
+	color: #FF4500;
+}
