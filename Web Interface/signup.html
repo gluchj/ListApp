@@ -15,51 +15,33 @@
 					<span style='margin-left: 15px'>LIST</span><span style='color: #7C7C7C'>.APP</span>
 				</div>
 				<div class='menu'>
-					<a style="color:#333333; font-weight: bold;" href='listapp.html'>HOME</a>
-					<a href='signup.html'>SIGNUP</a>
+					<a href='listapp.html'>HOME</a>
+					<a style="color:#333333; font-weight: bold;" href='signup.html'>SIGNUP</a>
 					<a href='#'>ABOUT</a>
 					<a href='#'>HELP</a>
 				</div>
 			</div> <!-- end of DIV header -->
 		
 			<div class='main-content'>
-				<div class='main-content left'>
-					<p>
+				<div class='main-content right'>
+					<div class='main-content signup'>
 						<span style='color: #FF4500; font-weight: bold; font-size: 20pt;'>
 							LIST
 						</span>
 						<span style='color: #7C7C7C; font-weight: bold; font-size: 20pt;'>
 							.APP
 						</span>
-						is a REST based multi-user list application. It utilizes Java Servlet 3.0
-						along with Jersey 2.28 specification with a MySQL backend. Currently 
-						client-side access is provided via an Android/iOS app.
-					</p><br>
-					<p id='features'>
-						FEATURES
-						<ul>
-							<li>
-								<i class="fa fa-star" aria-hidden="true"></i>
-								Absolutely zero security measures
-							</li>
-							<li>
-								<i class="fa fa-star" aria-hidden="true"></i>
-								Questionable server uptime
-							</li><li>
-								<i class="fa fa-star" aria-hidden="true"></i>
-								No customer service support whatsoever
-							</li>
-							<li>
-								<i class="fa fa-star" aria-hidden="true"></i>
-								And so much more...
-							</li>
-						</ul>	
-					</p>
-				</div>	<!-- end of <div='main-content-left'> -->
-				<div class='main-content right'>
+						<span style='color: #3e495b; font-weight: bold; font-size: 20pt;'>
+							<p>&nbsp;Registration Form</p>
+						</span>
+					</div> <!-- end of <div class='main-content signup'> -->
+					
 					<div class='login'>
 						<i class="fa fa-user-circle fa-8x"></i>
 						<form action='' method='POST'>
+							<input type='text' name='fname' placeholder='FIRST NAME'>
+							<input type='text' name='lname' placeholder='LAST NAME'>
+							<input type='email' name='email' placeholder='EMAIL ADDRESS'>
 							<input type='text' name='username' placeholder='USERNAME'>
 							<input type='password' name='password' placeholder='PASSWORD'>
 							<button type='submit'>Submit</button>
