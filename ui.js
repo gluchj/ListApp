@@ -162,7 +162,7 @@ export default class ui extends React.Component {
 					titleStyle={{width: '100%'}}
 					onPress={this._onButtonPress}
 				/>
-				<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('https://jrg-dev.com')}>
+				<Text style={{color: 'blue', fontSize: 16}} onPress={ () => Linking.openURL('https://listapp.jrg-prod.com/webclient/')}>
 					Not a Member?
 				</Text>
 				<View style={{ flex: 1 }} />
