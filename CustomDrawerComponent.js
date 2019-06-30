@@ -96,11 +96,11 @@ export default class CustomDrawerComponent extends Component {
 				{/* confirm logout dialog box */}
 				<View>
 					<Dialog.Container visible={this.state.logoutDialogVisible}>
-						<Dialog.Title>Item delete</Dialog.Title>
+						<Dialog.Title>Logout</Dialog.Title>
 						<Dialog.Description>
 							Are you sure you want to logout?
 						</Dialog.Description>
-						<Text 
+						<Text
 							style={{ 
 								fontSize: 16,
 								color: 'red',
