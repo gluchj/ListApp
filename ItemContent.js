@@ -1,3 +1,10 @@
+/**
+	* ItemContent component displays item details screen for
+	* creating, editing an item from a list.
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
 import React from 'react';
 import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { Button, ListItem, Overlay, Input, } from 'react-native-elements';
@@ -37,7 +44,6 @@ export default class ItemContent extends React.Component {
 		return fetch(this.state.endpoint + '/users/' + this.state.username + '/lists/' + this.state.list)
 			.then((response) => response.json())
 			.then((responseJson) => {
-				//if (responseJson.data === undefined || responseJson.data.length == 0) {
 				if (responseJson.data === undefined) {
 					this.setState({ isLoading: false });
 				}

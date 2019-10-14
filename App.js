@@ -1,3 +1,10 @@
+/**
+ 	* app.js imports all components, creates stacknavigator and drawernavigator
+  * exports app container
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import ListContent from './ListContent';
 import ItemContent from './ItemContent';

@@ -1,7 +1,12 @@
+/**
+	* ui component is the login component for the listapp mobile app. Allows
+	* user to specify username/password/host.
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage, KeyboardAvoidingView, Linking } from 'react-native';
 import { Input, Button, CheckBox } from 'react-native-elements';
-//Server Address = 'http://67.172.87.92:8080/rest/api' + /users/
 
 export default class ui extends React.Component {
 	constructor(props) {

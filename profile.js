@@ -1,4 +1,11 @@
-import React, { Component }from 'react';
+/**
+	* The Profile component displays user details screen for
+	* viewing and editing profile data.
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';

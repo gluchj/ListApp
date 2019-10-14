@@ -1,3 +1,10 @@
+/**
+	* ListContent component displays items from a list for
+	* viewing, sharing, and deleting.
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
 import React from 'react';
 import { StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { ListItem, Button, Input } from 'react-native-elements';

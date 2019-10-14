@@ -1,3 +1,10 @@
+/**
+	* Builds drawer components (profile and about screens), along with
+	* logout functionality
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';

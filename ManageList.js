@@ -1,3 +1,9 @@
+/**
+	* ManageList component handles "sharing" functionality of a list.
+	* 
+	* joel gluch, joel.gluch@gmail.com
+  **/
+
 import React from 'react';
 import { KeyboardAvoidingView, StyleSheet, FlatList, ActivityIndicator, Text, View, TouchableHighlight } from 'react-native';
 import { ListItem, Button, Input, Card } from 'react-native-elements';
